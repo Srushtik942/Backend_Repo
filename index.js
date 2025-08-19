@@ -1,6 +1,5 @@
 const {initializeDatabase} = require("./db/db.connect")
 const fs = require("fs");
-const movies = require("./BE1.1_Cw/models/movies.models");
 const Movie = require("./BE1.1_Cw/models/movies.models");
 initializeDatabase();
 
