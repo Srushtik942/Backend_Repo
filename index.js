@@ -6,30 +6,58 @@ initializeDatabase();
 const jsonData = fs.readFileSync('movies.json','utf-8');
 const moviesData = JSON.parse(jsonData);
 
-function seedData(){
-    try{
-        for(const movieData of moviesData){
-            const newMovie = new Movie({
-                title : movieData.title,
-                releaseYear : movieData.releaseYear,
-                genre: movieData.genre,
-                director: movieData.director,
-                actors: movieData.actors,
-                language: movieData.language,
-                country : movieData.country,
-                rating: movieData.rating,
-                plot: movieData.plot,
-                awards: movieData.awards,
-                posterUrl: movieData.posterUrl,
-                trailerUrl: movieData.trailerUrl
+// function seedData(){
+//     try{
+//         for(const movieData of moviesData){
+//             const newMovie = new Movie({
+//                 title : movieData.title,
+//                 releaseYear : movieData.releaseYear,
+//                 genre: movieData.genre,
+//                 director: movieData.director,
+//                 actors: movieData.actors,
+//                 language: movieData.language,
+//                 country : movieData.country,
+//                 rating: movieData.rating,
+//                 plot: movieData.plot,
+//                 awards: movieData.awards,
+//                 posterUrl: movieData.posterUrl,
+//                 trailerUrl: movieData.trailerUrl
 
-           })
-            newMovie.save();
-        }
+//            })
+//             newMovie.save();
+//         }
+//     }catch(error){
+//      console.log("Error seeding the data",error);
+//     }
+// }
+
+// seedData();
+
+
+const newMovie = {
+    title: "new Movie",
+    releaseYear: 1965,
+    genre: ["Romance"],
+    director: "new dirctor",
+    actors: ["actor 1", "actor 2"],
+    language: "Hindi",
+    country: "India",
+    rating: 8.1,
+    plot: "A young man and woman fall in love on a Europe trip.",
+    awards: "Multiple Filmfare Awards",
+    posterUrl: "https://example.com/poster1.jpg",
+    trailerUrl: "https://example.com/trailer1.mp4"
+  }
+
+async function createMovie(newMovie) {
+    try{
+        const movie = new Movie(newMovie);
+        const saveMovie = await movie.save();
+        console.log("New movie data:", saveMovie);
+
     }catch(error){
-     console.log("Error seeding the data",error);
+        throw error
     }
 }
 
-seedData();
-
+createMovie(newMovie);

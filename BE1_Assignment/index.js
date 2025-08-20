@@ -7,7 +7,6 @@ initializeDatabase();
 const jsonData = fs.readFileSync("cars.json","utf-8");
 const carsData = JSON.parse(jsonData);
 
-
 function seedData(){
    try{
     for(const carData of carsData){
@@ -38,3 +37,19 @@ function seedData(){
 }
 
 seedData();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
