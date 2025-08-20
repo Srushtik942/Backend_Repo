@@ -60,4 +60,44 @@ async function createMovie(newMovie) {
     }
 }
 
-createMovie(newMovie);
+// createMovie(newMovie);
+
+// find a movie with particular title
+
+async function readMovieFileTitle (movieTitle){
+    try{
+        const movie = await Movie.findOne({title : movieTitle});
+        console.log(movie);
+
+    }catch(error){
+        throw error
+    }
+}
+
+readMovieFileTitle("3 Idiots")
+
+// find all movies
+
+async function getAllMovies(){
+    try{
+        const movie = await Movie.find();
+        console.log("All Movies",movie);
+
+    }catch(error){
+        throw error;
+    }
+}
+// getAllMovies();
+
+// get movie by director
+
+async function readMovieByDirector(director){
+    try{
+        const movieByDirector = await Movie.find({director:director});
+        console.log(movieByDirector);
+
+    }catch(error){
+        throw error;
+    }
+}
+// readMovieByDirector("Kabir Khan")
