@@ -1,10 +1,7 @@
 const {initializeDatabase} = require("../db/db.connect");
 const fs = require("fs");
 const Restaurants = require("./models/restaurant.models");
-
 initializeDatabase();
-
-// const jsonData = JSON.parse("")
 
 const newRestaurant = {
   name: "Cha Cha",
@@ -27,11 +24,9 @@ async function createRestaurant(newRestaurant) {
         const Restaurant = new Restaurants(newRestaurant);
         const saveRes = await Restaurant.save();
         console.log(saveRes);
-
     }catch(error){
         throw error
     }
-
 }
 
 createRestaurant(newRestaurant) ;
