@@ -155,4 +155,49 @@ async function getHotelsByPhone(phoneNumber){
     }
 }
 
-getHotelsByPhone("+1299655890")
+// getHotelsByPhone("+1299655890")
+
+
+// 1. Create a function that accepts a hotel ID and an object with updated data, and updates the hotel data with the provided ID. Take the _id of the hotel from your database which has the name Lake View and update its checkOutTime to 11 AM. Console the updated hotel.
+
+async function updateHotelInfo(hotelId, dataToUpdate){
+    try{
+        const updateData = await Hotels.findByIdAndUpdate(hotelId, dataToUpdate, {new:true});
+        console.log(updateData);
+
+    }catch(error){
+        throw error;
+    }
+}
+
+// updateHotelInfo("68a586e8122cea0efb58c3ed", {checkOutTime:"11 AM"})
+
+
+// 2. Create a function that accepts a hotel name and an object with updated data, and updates the hotel data. Take the hotel which has the name "Sunset Resort" and update its rating to 4.2. Console the updated hotel.
+
+async function updateHotels(name, dataToUpdate){
+    try{
+        const updateData = await Hotels.findOneAndUpdate({name:name}, dataToUpdate, {new: true});
+        console.log(updateData);
+
+    }catch(error){
+        throw error;
+    }
+
+}
+// updateHotels("Sunset Resort", {rating:4.2});
+
+
+//  Create a function that accepts a hotel's phone number and an object with updated data, and updates the hotel data. Take the hotel which has the phone number "+1299655890" and update its phone number  to "+1997687392". Console the updated hotel details.
+
+async function updateHotelInfos(phoneNumber, dataToUpdate){
+    try{
+        const updateData = await Hotels.findOneAndUpdate({phoneNumber:phoneNumber}, dataToUpdate, {new:true});
+        console.log(updateData);
+
+    }catch(error){
+        throw error;
+    }
+}
+
+updateHotelInfos("+1299655890", {phoneNumber:+1997687392})
