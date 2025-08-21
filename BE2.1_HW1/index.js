@@ -114,6 +114,54 @@ async function restaurantByCuisine(dishname){
     }
 }
 
- restaurantByCuisine("Italian");
+//  restaurantByCuisine("Italian");
 
 
+
+// 1. Create a function that accepts a restaurant ID and an object with updated data, and updates the restaurant with the provided ID. Take the _id of the restaurant which has the name Yo China and update its rating from 3.9 to 4.1. Console the updated restaurant.
+
+
+async function updateesstaurant(resId, rating){
+    try{
+        const updateRating = await Restaurants.findByIdAndUpdate(resId, rating, {new: true});
+        console.log(updateRating);
+
+    }catch(error){
+        throw error;
+    }
+}
+
+// updateesstaurant("68a6b1944be231b590be88e9", {rating:4.1})
+
+
+//2. Create a function that accepts a restaurant name and an object with updated data, and updates the restaurant. Take the restaurant which has the name "Somi" and update its name from "Somi" to "Som Sarovar". Console the updated restaurant.
+
+
+async function updateRes(name, dataToUpdate) {
+    try{
+      const updateName = await Restaurants.findOneAndUpdate({name:name}, dataToUpdate, {new: true});
+      console.log(updateName);
+
+    }catch(error){
+        throw error;
+    }
+
+}
+
+updateRes("Somi",  {name: "Som Sarovar"});
+
+
+//3. Create a function that accepts a restaurant's phone number and an object with updated data, and updates the restaurant. Take the restaurant which has the phone number "+1288997392" and update isDeliveryAvailable option to true. Console the updated restaurant.
+
+
+async function restuarantUpdate(phoneNumber, dataToUpdate){
+    try{
+        const updateRestaurantInfo = await Restaurants.findOneAndUpdate({phoneNumber: phoneNumber}, dataToUpdate, {new: true});
+        console.log(updateRestaurantInfo);
+
+    }catch(error){
+        throw error;
+    }
+}
+
+restuarantUpdate("+1288997392", {isDeliveryAvailable:true })
