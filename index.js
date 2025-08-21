@@ -74,7 +74,7 @@ async function readMovieFileTitle (movieTitle){
     }
 }
 
-readMovieFileTitle("3 Idiots")
+// readMovieFileTitle("3 Idiots")
 
 // find all movies
 
@@ -101,3 +101,34 @@ async function readMovieByDirector(director){
     }
 }
 // readMovieByDirector("Kabir Khan")
+
+
+// find movie by id and update rating
+
+async function updateMovie(movieId, dataToUpdate){
+
+    try{
+  const updatedMovie = await Movie.findByIdAndUpdate(movieId, dataToUpdate, {new: true});
+  console.log(updatedMovie);
+
+    }catch(error){
+        throw error;
+    }
+}
+
+updateMovie("68a45d18dabcf67589e65277",{releaseYear: 2002});
+
+
+// find one method
+
+async function updateYear(title, dataToUpdate) {
+    try{
+        const updateYear = await Movie.findOneAndUpdate({title:title}, dataToUpdate, {new: true});
+        console.log(updateYear);
+    }catch(error){
+        throw error;
+    }
+}
+
+updateYear("Kabhi Khushi Kabhi Gham", { releaseYear: 2001});
+
