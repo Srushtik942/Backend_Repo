@@ -164,4 +164,35 @@ async function restuarantUpdate(phoneNumber, dataToUpdate){
     }
 }
 
-restuarantUpdate("+1288997392", {isDeliveryAvailable:true })
+// restuarantUpdate("+1288997392", {isDeliveryAvailable:true })
+
+
+//  Create a function deleteRestaurantById that accepts a restaurant ID and deletes the restaurant data from the db. Take any restaurant id from your database and delete the records of that restaurant.
+
+
+async function deleteRestaurantById (resId){
+
+    try{
+      const deleteRestaurant = await Restaurants.findByIdAndDelete(resId);
+      console.log("Succesfully deleted the restaurant!", deleteRestaurant);
+
+    }catch(error){
+        console.log("Error",error);
+    }
+}
+
+// deleteRestaurantById ("68a56604f06cc7741b5b7a2c")
+
+
+async function deleteRestaurantByName(resName) {
+    try{
+   const deleteRestaurant = await Restaurants.findOneAndDelete({name:resName});
+   console.log("Deleted Restaurant!", deleteRestaurant);
+
+    }catch(error){
+        console.log("Error",error);
+    }
+
+}
+
+deleteRestaurantByName("Yo China")
