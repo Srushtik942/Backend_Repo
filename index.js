@@ -130,5 +130,28 @@ async function updateYear(title, dataToUpdate) {
     }
 }
 
-updateYear("Kabhi Khushi Kabhi Gham", { releaseYear: 2001});
+// updateYear("Kabhi Khushi Kabhi Gham", { releaseYear: 2001});
+
+// find movie by id and delete it
+
+async function deleteMovie(movieId){
+    try{
+        const deleteMovie = await Movie.findByIdAndDelete(movieId);
+
+    }catch(error){
+        consolelog("Error in deleeting movie!", error)
+    }
+}
+
+// deleteMovie("68a45d18dabcf67589e65277")
+
+async function deleteMovieFromDb(movieTitle){
+    try{
+        const deleteMovie = await Movie.findOneAndDelete({title:movieTitle});
+        console.log(deleteMovie);
+    }catch(error){
+        console.log("Error in movie deletion!",error);
+    }
+}
+deleteMovieFromDb("3 Idiots")
 
