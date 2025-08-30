@@ -1,6 +1,9 @@
 const {initializeDatabase} = require("../db/db.connect");
 const fs = require("fs");
 const Hotels = require("./models/hotels.models");
+const express = require("express");
+const app = express();
+app.use(express.json());
 
 initializeDatabase();
 
@@ -44,6 +47,7 @@ async function getAllData() {
    try{
     const Hotel = await Hotels.find();
     console.log(Hotel);
+    return Hotel
 
    }catch(error){
     throw error;
@@ -53,6 +57,21 @@ async function getAllData() {
 
 // getAllData()
 
+app.get("/hotels",async(req,res)=>{
+    try{
+        const hotelsResult = await getAllData();
+
+        if(hotelsResult.length !== 0){
+            res.status(200).json(hotelsResult);
+        }else{
+            res.status(404).json({error:"Hotels not found"})
+        }
+
+    }catch(error){
+        res.status(500).json({error:"failed to fetch hotels"});
+    }
+})
+
 
 // 3. Create a function to read all hotels from the database. Console all the hotels. Use proper function and variable names.
 
@@ -60,6 +79,7 @@ async function getAllHotels(hotelName) {
     try{
         const getData = Hotels.find({name:hotelName});
         console.log(getData);
+        return getData;
 
     }catch(error){
         throw error;
@@ -68,6 +88,22 @@ async function getAllHotels(hotelName) {
 }
 
 // getAllHotels("Lake View");
+
+app.get("/hotels/:hotelName",async(req,res)=>{
+    try{
+        const hotels = await getAllHotels(req.params.hotelName);
+        console.log(hotels);
+
+        if(hotels){
+            res.status(200).json(hotels);
+        }else{
+            res.status(404).json({error:"Hotels not found!"})
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch data!"});
+    }
+})
 
 
 // . Create a function to read all hotels which offers parking space. Console all the hotel details.
@@ -104,6 +140,7 @@ async function readAllHotelsByCategory (category){
     try{
         const newData = await Hotels.find({category: category});
         console.log(newData);
+        return newData;
 
     }catch(error){
         throw error;
@@ -111,6 +148,22 @@ async function readAllHotelsByCategory (category){
 }
 
 // readAllHotelsByCategory("Mid-Range")
+
+app.get("/hotels/category/:hotelCategory",async(req,res)=>{
+    try{
+        const hotelNewData = await readAllHotelsByCategory(req.params.hotelCategory);
+
+        if(hotelNewData){
+            res.status(200).json(hotelNewData);
+        }
+        else{
+            res.status(404).json({error:"hotels not found!"})
+        }
+
+    }catch(error){
+        res.status(500).json({message:"Hotels not found!"});
+    }
+})
 
 
 // 8. Create a function to read all hotels by price range ("$$$$ (61+)"). Console all the hotels.
@@ -134,6 +187,7 @@ async function getHotelsByRating (rating){
     try{
         const newData = await Hotels.find({rating:rating});
         console.log(newData);
+        return newData;
 
     }catch(error){
         throw error
@@ -142,6 +196,23 @@ async function getHotelsByRating (rating){
 
 // getHotelsByRating ("4.0")
 
+app.get("/hotels/rating/:hotelRating",async(req,res)=>{
+    try{
+        const newData = await getHotelsByRating(req.params.hotelRating);
+        console.log(newData);
+        if(newData){
+            res.status(200).json(newData);
+        }else{
+            res.status(500).json({messsage:"No hotels found!"})
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch data!"});
+    }
+})
+
+
+
 // 10. Create a function to read a hotel by phone number ("+1299655890"). Console the hotel data.
 
 
@@ -149,6 +220,7 @@ async function getHotelsByPhone(phoneNumber){
     try{
         const newData = await Hotels.find({phoneNumber: phoneNumber});
         console.log(newData);
+        return newData;
 
     }catch(error){
         throw error
@@ -156,6 +228,21 @@ async function getHotelsByPhone(phoneNumber){
 }
 
 // getHotelsByPhone("+1299655890")
+
+app.get("/hotels/directory/:phoneNumber",async(req,res)=>{
+    try{
+        const hotelsData = await getHotelsByPhone(req.params.phoneNumber);
+
+        if(hotelsData){
+            res.status(200).json(hotelsData);
+        }else{
+            res.status(500).json({error:"Hotels not found!"});
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch hotels"});
+    }
+})
 
 
 // 1. Create a function that accepts a hotel ID and an object with updated data, and updates the hotel data with the provided ID. Take the _id of the hotel from your database which has the name Lake View and update its checkOutTime to 11 AM. Console the updated hotel.
@@ -225,3 +312,9 @@ async function deleteHotelByPhoneNumber(phoneNumber) {
 }
 
 deleteHotelByPhoneNumber("1997687392");
+
+
+const PORT = 3000;
+app.listen(PORT,()=>{
+    console.log(`Server is running on port ${PORT}`);
+})
