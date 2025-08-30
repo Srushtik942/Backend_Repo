@@ -1,7 +1,11 @@
 const {initializeDatabase} = require("./db/db.connect")
+const express = require("express");
 const fs = require("fs");
 const Movie = require("./BE1.1_Cw/models/movies.models");
 initializeDatabase();
+const app = express();
+
+app.use(express.json());
 
 const jsonData = fs.readFileSync('movies.json','utf-8');
 const moviesData = JSON.parse(jsonData);
@@ -68,6 +72,7 @@ async function readMovieFileTitle (movieTitle){
     try{
         const movie = await Movie.findOne({title : movieTitle});
         console.log(movie);
+        return movie;
 
     }catch(error){
         throw error
@@ -76,12 +81,27 @@ async function readMovieFileTitle (movieTitle){
 
 // readMovieFileTitle("3 Idiots")
 
+
+app.get("/movie/:title",async(req,res)=>{
+    try{
+        const movie = await readMovieFileTitle(req.params.title);
+        if(movie){
+            res.json(movie);
+        }else{
+            res.status(404).json({error:"Movie not found!"});
+        }
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch movie."})
+    }
+})
+
 // find all movies
 
 async function getAllMovies(){
     try{
         const movie = await Movie.find();
         console.log("All Movies",movie);
+        return movie;
 
     }catch(error){
         throw error;
@@ -89,12 +109,29 @@ async function getAllMovies(){
 }
 // getAllMovies();
 
+
+app.get("/movies",async(req,res)=>{
+    try{
+        const movie = await getAllMovies()
+        if(movie.length !== 0){
+            res.json(movie);
+        }else{
+            res.status(500).json({error:"Failed to fetch movies"})
+
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch movie!"});
+    }
+})
+
 // get movie by director
 
 async function readMovieByDirector(director){
     try{
         const movieByDirector = await Movie.find({director:director});
         console.log(movieByDirector);
+        return movieByDirector;
 
     }catch(error){
         throw error;
@@ -102,6 +139,47 @@ async function readMovieByDirector(director){
 }
 // readMovieByDirector("Kabir Khan")
 
+app.get("/movies/director/:directorName",async(req,res)=>{
+    try{
+        const movieResult = await readMovieByDirector(req.params.directorName);
+        if(movieResult.length !== 0){
+            res.status(200).json(movieResult)
+
+        }else{
+            res.status(404).json({error:"No Movies found"});
+        }
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch movie by director"});
+    }
+})
+
+
+// find movie by genre
+
+async function readMovieByGenre(genreName){
+    try{
+        const movieByGenre = await Movie.find({genre:genreName});
+        return movieByGenre;
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
+app.get("/movies/genres/:genreName",async(req,res)=>{
+    try{
+        const movie = await readMovieByGenre(req.params.genreName);
+        if(movie.length !== 0){
+            res.json(movie);
+        }
+        else{
+            res.status(404).json({error:"No Movies found!"})
+        }
+
+    }catch(error){
+        res.status(500).json({message:"Failed to fetch movie"})
+    }
+})
 
 // find movie by id and update rating
 
@@ -155,3 +233,8 @@ async function deleteMovieFromDb(movieTitle){
 }
 deleteMovieFromDb("3 Idiots")
 
+const PORT = 5000;
+
+app.listen(PORT,()=>{
+    console.log(`Server is running on port ${PORT}`);
+})

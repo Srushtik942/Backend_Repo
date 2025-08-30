@@ -1,42 +1,7 @@
 const {initializeDatabase} = require("../db/db.connect");
-const fs = require("fs");
 const Cars = require("./models/cars.models");
 
 initializeDatabase();
-
-// const jsonData = fs.readFileSync("cars.json","utf-8");
-// const carsData = JSON.parse(jsonData);
-
-// function seedData(){
-//    try{
-//     for(const carData of carsData){
-//         const newCar = new Cars({
-//             brand:carData.brand,
-//             model: carData.model,
-//             year: carData.year,
-//             bodyStyle: carData.bodyStyle,
-//             fuelType: carData.fuelType,
-//             transmission: carData.transmission,
-//             engine: carData.engine,
-//             mileage: carData.mileage,
-//             color: carData.color,
-//             price: carData.price,
-//             condition: carData.condition,
-//             description: carData.description,
-//             photos: carData.photos,
-//             inMarket: carData.inMarket
-//         })
-//         // console.log(newCar);
-
-//         newCar.save();
-//     }
-
-//    }catch(error){
-//     console.log("Error",error);
-//    }
-// }
-
-// seedData();
 
   const carData = {
    brand: "Honda",
@@ -60,6 +25,7 @@ initializeDatabase();
 
 async function createNewCarData(carData){
     try{
+        // creating a new mongoose document 
         const newCar = new Cars(carData);
         const car = await newCar.save();
         console.log("New Car",car);
@@ -68,7 +34,10 @@ async function createNewCarData(carData){
         throw error;
     }
 }
-// getting all cars dara
+
+createNewCarData(carData)
+
+// getting all cars data
 
 async function getAllCars(){
     try{
@@ -79,7 +48,7 @@ async function getAllCars(){
         throw error;
     }
 }
-// getAllCars()
+getAllCars()
 
 // Create a function to read cars by brand ("Ford").
 
@@ -91,7 +60,7 @@ async function getCarByName(brandName){
         throw error;
     }
 }
-// getCarByName("Ford")
+getCarByName("Ford")
 
 // Create a function to read cars by color ("Black"). Console
 
@@ -105,7 +74,7 @@ async function getCarByColor(colorName){
     }
 }
 
-// getCarByColor("Black")
+getCarByColor("Black")
 
 
 // Create a function to update the price of a car with model "Corolla"
@@ -120,7 +89,7 @@ async function updatPrice(name, dataToUpdate){
     }
 }
 
-// updatPrice("Corolla",{price: 2300000});
+updatPrice("Corolla",{price: 2300000});
 
 
 // reate a function to update the condition of a car with model "Model S"
@@ -134,7 +103,7 @@ async function updateCondition(model,dataToUpdate){
         throw error;
     }
 }
-// updateCondition("Model S",{condition: "Used"})
+updateCondition("Model S",{condition: "Used"})
 
 
 
@@ -150,7 +119,7 @@ async function deleteCarById(carId){
         throw error;
     }
 }
-// deleteCarById("68a49b32b6244841571e3f76")
+deleteCarById("68a49b32b6244841571e3f76")
 
 
 // 9. Create a function to delete a car by its body style. Delete the car data with body style "Coupe" from the database console the deleted car data.

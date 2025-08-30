@@ -169,7 +169,6 @@ async function restuarantUpdate(phoneNumber, dataToUpdate){
 
 //  Create a function deleteRestaurantById that accepts a restaurant ID and deletes the restaurant data from the db. Take any restaurant id from your database and delete the records of that restaurant.
 
-
 async function deleteRestaurantById (resId){
 
     try{
@@ -183,7 +182,6 @@ async function deleteRestaurantById (resId){
 
 // deleteRestaurantById ("68a56604f06cc7741b5b7a2c")
 
-
 async function deleteRestaurantByName(resName) {
     try{
    const deleteRestaurant = await Restaurants.findOneAndDelete({name:resName});
@@ -194,5 +192,4 @@ async function deleteRestaurantByName(resName) {
     }
 
 }
-
 deleteRestaurantByName("Yo China")
