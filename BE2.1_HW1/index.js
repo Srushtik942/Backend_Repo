@@ -2,6 +2,10 @@ const {initializeDatabase} = require("../db/db.connect");
 const fs = require("fs");
 const Restaurants = require("./models/restaurant.models");
 initializeDatabase();
+const express = require("express");
+const { error } = require("console");
+const app = express();
+app.use(express.json());
 
 const newRestaurant = {
    name: "Yo China",
@@ -36,6 +40,7 @@ async function getAllRestaurants (){
     try{
         const Restaurant = await Restaurants.find();
         console.log("All Restaurants",Restaurant);
+        return Restaurant
 
     }catch(error){
         throw error;
@@ -44,16 +49,50 @@ async function getAllRestaurants (){
 
 // getAllRestaurants();
 
+app.get("/restaurant",async(req,res)=>{
+    try{
+        const restaurantResult = await getAllRestaurants();
+        console.log("restaurantResult",restaurantResult);
+        if(restaurantResult.length !== 0){
+            res.status(200).json(restaurantResult);
+        }else{
+            res.status(404).json({error:"Retsuarants not found!"});
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restaurants!"});
+    }
+})
 
 async function getRestaurantByName(restaurantName){
     try{
         const RestaurantName = await Restaurants.findOne({name: restaurantName});
-        console.log(RestaurantName);
+        console.log("RestaurantName",RestaurantName);
+        return RestaurantName;
 
     }catch(error){
         throw error;
     }
 }
+
+app.get("/restaurants/:restaurantName",async(req,res)=>{
+    try{
+        const restaurantRes = await getRestaurantByName(req.params.restaurantName);
+        console.log(restaurantRes);
+
+        if(restaurantRes){
+            res.status(200).json(restaurantRes);
+        }
+        else{
+            res.status(404).json({error:"Restaurant not found"});
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restauarnt!"});
+    }
+})
+
+
 
 // getRestaurantByName("Somi");
 
@@ -94,12 +133,29 @@ async function readRestauarantPhone(number){
     try{
         const newRestaurant = await Restaurants.find({phoneNumber: number});
         console.log(newRestaurant);
+        return newRestaurant;
 
     }catch(error){
         throw error;
     }
 }
 // readRestauarantPhone("+1288997392");
+
+app.get("/restaurants/directory/:phoneNumber",async(req,res)=>{
+    try{
+        const restauarantByPhone = await readRestauarantPhone(req.params.phoneNumber);
+        console.log(restauarantByPhone);
+
+        if(restauarantByPhone){
+            res.status(200).json(restauarantByPhone);
+        }else{
+            res.status(404).json({error:"Restaurant not found"})
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restaurant"});
+    }
+})
 
 
 // . Create a function to read all restaurants by cuisine ("Italian"). Console all the restaurants with Italian cuisine.
@@ -109,12 +165,56 @@ async function restaurantByCuisine(dishname){
     try{
         const newRestaurant = await Restaurants.find({cuisine:dishname })
         console.log(newRestaurant);
+        return newRestaurant
     }catch(error){
         throw error;
     }
 }
 
 //  restaurantByCuisine("Italian");
+
+app.get("/restaurants/cuisine/:cuisineName",async(req,res)=>{
+    try{
+        const restaurantResult = await restaurantByCuisine(req.params.cuisineName);
+
+        if(restaurantResult){
+            res.status(200).json(restaurantResult);
+        }else{
+            res.status(404).json({error:"Restauarant not found by cuisine"})
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restaurant"});
+    }
+})
+
+// fetch res by location
+
+async function getResByLocation(location){
+    try{
+        const newRestaurant = await Restaurants.find({location:location })
+        console.log(newRestaurant);
+        return newRestaurant
+    }catch(error){
+        throw error;
+    }
+
+}
+
+app.get("/restaurants/location/:restaurantLocation",async(req,res)=>{
+    try{
+        const restaurantResult = await getResByLocation(req.params.restaurantLocation);
+
+        if(restaurantResult){
+            res.status(200).json(restaurantResult);
+        }else{
+            res.status(404).json({error:"Restauant not found by location"})
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restarant!"});
+    }
+})
 
 
 
@@ -193,3 +293,10 @@ async function deleteRestaurantByName(resName) {
 
 }
 deleteRestaurantByName("Yo China")
+
+
+const PORT = 3000;
+
+app.listen(PORT,()=>{
+    console.log(`Server is running on port ${PORT}`);
+})
