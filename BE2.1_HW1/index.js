@@ -7,33 +7,45 @@ const { error } = require("console");
 const app = express();
 app.use(express.json());
 
-const newRestaurant = {
-   name: "Yo China",
-  cuisine: ["Chinese", "Italian"],
-  location: "MG Road, Bangalore",
-  rating: 3.9,
-  reviews: [],
-  website: "https://yo-example.com",
-  phoneNumber: "+1288997392",
-  openHours: "Tue-Sun: 10:00 AM - 11:00 PM",
-  priceRange: "$$$ (31-60)",
-  reservationsNeeded: true,
-  isDeliveryAvailable: false,
-  menuUrl: "https://yo-example.com/menu",
-  photos: ["https://example.com/yo-photo1.jpg", "https://example.com/yo-photo2.jpg", "https://example.com/yo-photo3.jpg"]
-};
+// const newRestaurant = {
+//    name: "Yo China",
+//   cuisine: ["Chinese", "Italian"],
+//   location: "MG Road, Bangalore",
+//   rating: 3.9,
+//   reviews: [],
+//   website: "https://yo-example.com",
+//   phoneNumber: "+1288997392",
+//   openHours: "Tue-Sun: 10:00 AM - 11:00 PM",
+//   priceRange: "$$$ (31-60)",
+//   reservationsNeeded: true,
+//   isDeliveryAvailable: false,
+//   menuUrl: "https://yo-example.com/menu",
+//   photos: ["https://example.com/yo-photo1.jpg", "https://example.com/yo-photo2.jpg", "https://example.com/yo-photo3.jpg"]
+// };
 
 async function createRestaurant(newRestaurant) {
     try{
         const Restaurant = new Restaurants(newRestaurant);
         const saveRes = await Restaurant.save();
         console.log(saveRes);
+        return saveRes;
     }catch(error){
         throw error
     }
 }
 
 // createRestaurant(newRestaurant) ;
+
+app.post("/restaurants",async(req,res)=>{
+    try{
+        const newRestaurantData = await createRestaurant(req.body);
+        console.log("newRestaurantData",newRestaurantData);
+        res.status(200).json({message:"Restaurant added successfully!",Restaurant: newRestaurantData});
+
+    }catch(error){
+        res.status(500).json({error:"Failed to add restaurant!"});
+    }
+})
 
 
 async function getAllRestaurants (){
