@@ -306,6 +306,29 @@ async function deleteRestaurantByName(resName) {
 }
 deleteRestaurantByName("Yo China")
 
+// delete rstaurant by id
+
+async function deleteRestaurant(resId) {
+    try{
+        const deleteRes = await Restaurants.findByIdAndDelete(resId);
+        return deleteRes;
+
+    }catch(error){
+        console.log(error);
+    }
+
+}
+
+app.delete("/restaurants/:restaurantId",async(req,res)=>{
+    try{
+        const restauarantData = await deleteRestaurant(req.params.restaurantId);
+        res.status(200).json({message:"Restaurant deleted successfully!"})
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restaurant"});
+    }
+})
+
 
 const PORT = 3000;
 
