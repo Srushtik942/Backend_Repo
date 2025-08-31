@@ -199,13 +199,28 @@ async function updateMovie(movieId, dataToUpdate){
     try{
   const updatedMovie = await Movie.findByIdAndUpdate(movieId, dataToUpdate, {new: true});
   console.log(updatedMovie);
+  return updatedMovie;
 
     }catch(error){
         throw error;
     }
 }
 
-updateMovie("68a45d18dabcf67589e65277",{releaseYear: 2002});
+// updateMovie("68a45d18dabcf67589e65277",{releaseYear: 2002});
+
+app.post("/movies/:movieId",async(req,res)=>{
+    try{
+        const updatedMovie = await updateMovie(req.params.movieId, req.body);
+        if(updatedMovie){
+            res.status(200).json({message:"Movie updted successfully!",movie:updatedMovie});
+        }else{
+            res.status(404).json({error:"Movie not found!"})
+        }
+
+    }catch(error){
+       res.status(500).json({error:"Failed to pdate the movie"});
+    }
+})
 
 
 // find one method
