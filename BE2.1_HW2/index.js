@@ -262,6 +262,7 @@ async function updateHotelInfo(hotelId, dataToUpdate){
     try{
         const updateData = await Hotels.findByIdAndUpdate(hotelId, dataToUpdate, {new:true});
         console.log(updateData);
+        return updateData
 
     }catch(error){
         throw error;
@@ -277,6 +278,7 @@ async function updateHotels(name, dataToUpdate){
     try{
         const updateData = await Hotels.findOneAndUpdate({name:name}, dataToUpdate, {new: true});
         console.log(updateData);
+        return updateData
 
     }catch(error){
         throw error;
@@ -299,6 +301,21 @@ async function updateHotelInfos(phoneNumber, dataToUpdate){
 }
 
 // updateHotelInfos("+1299655890", {phoneNumber:+1997687392})
+
+app.post("/hotels/:hotelId",async(req,res)=>{
+    try{
+        const resData = await updateHotelInfo(req.params.hotelId, req.body);
+        if(resData){
+            res.status(200).json({message:"Hotel Data!",hotels:resData});
+        }else{
+            res.status(404).json({error:"No hotels found!"});
+        }
+
+    }catch(error){
+        res.status(500).json({message:"Failed to fetch data!"});
+    }
+})
+
 
 async function deleteHotelById(hotelId) {
     try{
@@ -341,7 +358,7 @@ async function deleteHotelById(hotelId) {
 
 app.delete("/hotels/:hotelId",async(req,res)=>{
     try{
-        const newData = await await deleteHotelById(req.params.hotelId);
+        const newData = await  deleteHotelById(req.params.hotelId);
         res.status(200).json({message:"Hotel deleted successfully!"});
 
     }catch(error){
