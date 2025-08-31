@@ -325,6 +325,30 @@ async function deleteHotelByPhoneNumber(phoneNumber) {
 deleteHotelByPhoneNumber("1997687392");
 
 
+// delte hotel by id
+
+async function deleteHotelById(hotelId) {
+    try{
+        const deleteData = await Hotels.findByIdAndDelete(hotelId);
+        return deleteData
+
+    }catch(error){
+        console.log("Error",error);
+    }
+
+}
+
+
+app.delete("/hotels/:hotelId",async(req,res)=>{
+    try{
+        const newData = await await deleteHotelById(req.params.hotelId);
+        res.status(200).json({message:"Hotel deleted successfully!"});
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch hotels"});
+    }
+})
+
 const PORT = 3000;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
