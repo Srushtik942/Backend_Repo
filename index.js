@@ -244,6 +244,27 @@ async function deleteMovieFromDb(movieTitle){
 }
 deleteMovieFromDb("3 Idiots")
 
+async function deleteMovie(movieId){
+    try{
+        const findMovie = await Movie.findByIdAndDelete(movieId);
+        return findMovie;
+
+    }catch(error){
+        console.log(error);
+    }
+}
+
+app.delete("/movies/:movieId",async(req,res)=>{
+  try{
+    const deletedMovie = await deleteMovie(req.params.movieId);
+    res.status(200).json({message:"Movie deleted successfully!"})
+
+
+  }catch(error){
+    res.status(500).json({error:"Failed to delete a movie"});
+  }
+})
+
 const PORT = 5000;
 
 app.listen(PORT,()=>{
