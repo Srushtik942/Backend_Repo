@@ -38,33 +38,44 @@ const moviesData = JSON.parse(jsonData);
 // seedData();
 
 
-const newMovie = {
-    title: "new Movie",
-    releaseYear: 1965,
-    genre: ["Romance"],
-    director: "new dirctor",
-    actors: ["actor 1", "actor 2"],
-    language: "Hindi",
-    country: "India",
-    rating: 8.1,
-    plot: "A young man and woman fall in love on a Europe trip.",
-    awards: "Multiple Filmfare Awards",
-    posterUrl: "https://example.com/poster1.jpg",
-    trailerUrl: "https://example.com/trailer1.mp4"
-  }
+// const newMovie = {
+//     title: "new Movie",
+//     releaseYear: 2023,
+//     genre: ["Romance","Drama"],
+//     director: "new dirctor 1",
+//     actors: ["actor 1", "actor 2"],
+//     language: "Hindi",
+//     country: "India",
+//     rating: 8.1,
+//     plot: "A young man and woman fall in love on a Europe trip.",
+//     awards: "Multiple Filmfare Awards",
+//     posterUrl: "https://example.com/poster12.jpg",
+//     trailerUrl: "https://example.com/trailer13.mp4"
+//   }
 
 async function createMovie(newMovie) {
     try{
         const movie = new Movie(newMovie);
         const saveMovie = await movie.save();
-        console.log("New movie data:", saveMovie);
-
+        return saveMovie;
     }catch(error){
         throw error
     }
 }
 
 // createMovie(newMovie);
+
+app.post("/movies",async(req,res)=>{
+    try{
+        const savedMovies = await createMovie(req.body);
+
+        res.status(201).json({message:"Movie added successfully!",movie:savedMovies});
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch movie!"})
+    }
+})
+
 
 // find a movie with particular title
 
