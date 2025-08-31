@@ -237,6 +237,7 @@ async function updateesstaurant(resId, rating){
     try{
         const updateRating = await Restaurants.findByIdAndUpdate(resId, rating, {new: true});
         console.log(updateRating);
+        return updateRating;
 
     }catch(error){
         throw error;
@@ -244,6 +245,22 @@ async function updateesstaurant(resId, rating){
 }
 
 // updateesstaurant("68a6b1944be231b590be88e9", {rating:4.1})
+
+app.post("/restaurant/:resId",async(req,res)=>{
+    try{
+        const restaurantData = await updateesstaurant(req.params.resId,req.body);
+        if(restaurantData){
+            res.status(200).json({message:"Updated movie!",restaurant:restaurantData})
+        }else{
+            res.status(500).json({error:"No restauramt found!"});
+        }
+
+    }catch(error){
+        res.status(500).json({error:"Failed to fetch restaurant"});
+    }
+})
+
+
 
 
 //2. Create a function that accepts a restaurant name and an object with updated data, and updates the restaurant. Take the restaurant which has the name "Somi" and update its name from "Somi" to "Som Sarovar". Console the updated restaurant.
