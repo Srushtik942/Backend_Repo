@@ -2,7 +2,9 @@ const {initializeDatabase} = require("../db/db.connect");
 const fs = require("fs");
 const Hotels = require("./models/hotels.models");
 const express = require("express");
+const cors = require("cors");
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 initializeDatabase();
