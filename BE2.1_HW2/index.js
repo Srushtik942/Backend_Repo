@@ -90,7 +90,7 @@ app.get("/hotels",async(req,res)=>{
 
 async function getAllHotels(hotelName) {
     try{
-        const getData = Hotels.find({name:hotelName});
+        const getData = Hotels.findOne({name:hotelName});
         console.log(getData);
         return getData;
 
